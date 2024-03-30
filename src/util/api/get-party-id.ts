@@ -12,5 +12,6 @@ export async function getPartyId(shard: string, region: string, puuid: string, c
     })
 
     if(response.status === 404) throw new Error('Player is not in a party. Is Valorant running?')
+    if(!response.ok) throw new Error(`Failed to get party ID: ${response.status} ${response.statusText} - ${await response.text()}`)
     return (await response.json() as any)['CurrentPartyID'] as string
 }

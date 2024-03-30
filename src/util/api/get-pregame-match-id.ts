@@ -10,5 +10,6 @@ export async function getPregameMatchId(shard: string, region: string, puuid: st
     })
 
     if(response.status === 404) throw new Error('Player is not in a pregame lobby')
+    if(!response.ok) throw new Error(`Failed to get pregame match IO: ${response.status} ${response.statusText} - ${await response.text()}`)
     return (await response.json() as any)['MatchID'] as string
 }

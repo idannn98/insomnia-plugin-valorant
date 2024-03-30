@@ -10,5 +10,6 @@ export async function getCurrentGameMatchId(shard: string, region: string, puuid
     })
 
     if(response.status === 404) throw new Error('Player is not in an active match (after the agent select screen)')
+    if(!response.ok) throw new Error(`Failed to get current game match ID: ${response.status} ${response.statusText} - ${await response.text()}`)
     return (await response.json() as any)['MatchID'] as string
 }
