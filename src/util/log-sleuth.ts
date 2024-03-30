@@ -43,7 +43,8 @@ async function sleuth(file: string): Promise<Partial<LogInfo>> {
         if(info.clientVersion === undefined) {
             const match = clientVersionRegex.exec(line)
             if(match) {
-                info.clientVersion = match[1]
+                // Add in "shipping-" to match the client version format
+                info.clientVersion = match[1].replace(/^(release-\d+\.\d+-)/, '$1shipping-')
             }
         }
 
