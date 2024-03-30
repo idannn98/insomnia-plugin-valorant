@@ -91,6 +91,7 @@ if(hasWorkspaceActionsBug()) {
 
 const xmppManager = new XMPPManager()
 const xmppMITMManager = new XMPPMITMManager()
+const defaultClientPlatformString = 'ew0KCSJwbGF0Zm9ybVR5cGUiOiAiUEMiLA0KCSJwbGF0Zm9ybU9TIjogIldpbmRvd3MiLA0KCSJwbGF0Zm9ybU9TVmVyc2lvbiI6ICIxMC4wLjE5MDQyLjEuMjU2LjY0Yml0IiwNCgkicGxhdGZvcm1DaGlwc2V0IjogIlVua25vd24iDQp9'
 
 let cachedCompleteLogInfo: LogInfo | undefined = undefined
 let cachedAuthInfo: AuthRedirectData & {entitlement: string, pasToken?: string} | undefined = undefined
@@ -200,7 +201,7 @@ module.exports.templateTags = [
         description: 'Valorant client platform',
         run: onlyOne(async (ctx: TemplateTagContext) => {
             if(ctx.valorantOverrides?.clientPlatform !== undefined && ctx.valorantOverrides.clientPlatform.length !== 0) return ctx.valorantOverrides.clientPlatform
-            return 'ew0KCSJwbGF0Zm9ybVR5cGUiOiAiUEMiLA0KCSJwbGF0Zm9ybU9TIjogIldpbmRvd3MiLA0KCSJwbGF0Zm9ybU9TVmVyc2lvbiI6ICIxMC4wLjE5MDQyLjEuMjU2LjY0Yml0IiwNCgkicGxhdGZvcm1DaGlwc2V0IjogIlVua25vd24iDQp9'
+            return defaultClientPlatformString
         })
     },
     {
@@ -361,8 +362,9 @@ module.exports.templateTags = [
             const shard = (ctx.valorantOverrides?.shard !== undefined && ctx.valorantOverrides.shard.length !== 0) ? ctx.valorantOverrides.shard : (await getOrLoadRegionInfo()).shard
             const puuid = (ctx.valorantOverrides?.puuid !== undefined && ctx.valorantOverrides.puuid.length !== 0) ? ctx.valorantOverrides.puuid : (await getOrLoadAuthInfo()).puuid
             const clientVersion = (ctx.valorantOverrides?.clientVersion !== undefined && ctx.valorantOverrides.clientVersion.length !== 0) ? ctx.valorantOverrides.clientVersion : await getOrLoadClientVersion()
+            const clientPlatform = ctx.valorantOverrides?.clientPlatform !== undefined && ctx.valorantOverrides.clientPlatform.length !== 0 ? ctx.valorantOverrides.clientPlatform : defaultClientPlatformString
 
-            return await getPartyId(shard, region, puuid, clientVersion, token, entitlement)
+            return await getPartyId(shard, region, puuid, clientVersion, clientPlatform, token, entitlement)
         }))
     },
     {
