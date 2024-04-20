@@ -324,13 +324,16 @@ module.exports.templateTags = [
         run: cacheResult(1_000, onlyOne(async (ctx: TemplateTagContext) => {
             if(ctx.valorantOverrides?.pregameMatchId !== undefined && ctx.valorantOverrides.pregameMatchId.length !== 0) return ctx.valorantOverrides.pregameMatchId
 
+            //TODO refactor this to make the overrides easier to read and remove duplicate logic
             const token = (ctx.valorantOverrides?.token !== undefined && ctx.valorantOverrides.token.length !== 0) ? ctx.valorantOverrides.token : (await getOrLoadAuthInfo()).accessToken
             const entitlement = (ctx.valorantOverrides?.entitlement !== undefined && ctx.valorantOverrides.entitlement.length !== 0) ? ctx.valorantOverrides.entitlement : (await getOrLoadAuthInfo()).entitlement
             const region = (ctx.valorantOverrides?.region !== undefined && ctx.valorantOverrides.region.length !== 0) ? ctx.valorantOverrides.region : (await getOrLoadRegionInfo()).region
             const shard = (ctx.valorantOverrides?.shard !== undefined && ctx.valorantOverrides.shard.length !== 0) ? ctx.valorantOverrides.shard : (await getOrLoadRegionInfo()).shard
             const puuid = (ctx.valorantOverrides?.puuid !== undefined && ctx.valorantOverrides.puuid.length !== 0) ? ctx.valorantOverrides.puuid : (await getOrLoadAuthInfo()).puuid
+            const clientVersion = (ctx.valorantOverrides?.clientVersion !== undefined && ctx.valorantOverrides.clientVersion.length !== 0) ? ctx.valorantOverrides.clientVersion : await getOrLoadClientVersion()
+            const clientPlatform = ctx.valorantOverrides?.clientPlatform !== undefined && ctx.valorantOverrides.clientPlatform.length !== 0 ? ctx.valorantOverrides.clientPlatform : defaultClientPlatformString
 
-            return await getPregameMatchId(shard, region, puuid, token, entitlement)
+            return await getPregameMatchId(shard, region, puuid, clientVersion, clientPlatform, token, entitlement)
         }))
     },
     {
@@ -345,8 +348,10 @@ module.exports.templateTags = [
             const region = (ctx.valorantOverrides?.region !== undefined && ctx.valorantOverrides.region.length !== 0) ? ctx.valorantOverrides.region : (await getOrLoadRegionInfo()).region
             const shard = (ctx.valorantOverrides?.shard !== undefined && ctx.valorantOverrides.shard.length !== 0) ? ctx.valorantOverrides.shard : (await getOrLoadRegionInfo()).shard
             const puuid = (ctx.valorantOverrides?.puuid !== undefined && ctx.valorantOverrides.puuid.length !== 0) ? ctx.valorantOverrides.puuid : (await getOrLoadAuthInfo()).puuid
+            const clientVersion = (ctx.valorantOverrides?.clientVersion !== undefined && ctx.valorantOverrides.clientVersion.length !== 0) ? ctx.valorantOverrides.clientVersion : await getOrLoadClientVersion()
+            const clientPlatform = ctx.valorantOverrides?.clientPlatform !== undefined && ctx.valorantOverrides.clientPlatform.length !== 0 ? ctx.valorantOverrides.clientPlatform : defaultClientPlatformString
 
-            return getCurrentGameMatchId(shard, region, puuid, token, entitlement)
+            return getCurrentGameMatchId(shard, region, puuid, clientVersion, clientPlatform, token, entitlement)
         }))
     },
     {
