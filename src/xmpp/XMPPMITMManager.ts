@@ -136,7 +136,6 @@ export class XMPPMITMManager {
 
                 res.writeHead(response.status)
 
-                res.writeHead(response.status)
                 if(req.url?.startsWith('/api/v1/config/player') && response.status === 200) {
                     // Rewrite affinity data
                     const data = JSON.parse(text) satisfies PlayerConfigAffinities
